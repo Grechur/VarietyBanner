@@ -11,6 +11,7 @@
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        app:Mode = "meizu"
         />
     <Button
         android:layout_width="wrap_content"

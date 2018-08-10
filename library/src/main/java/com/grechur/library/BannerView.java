@@ -64,7 +64,7 @@ public class BannerView extends RelativeLayout{
         //加载界面
         View view = null;
         if(mMode == 1){
-            view = inflate(context,R.layout.banner_view,this);
+            view = inflate(context,R.layout.banner_mz_view,this);
         }else{
             view = inflate(context,R.layout.banner_view,this);
         }
