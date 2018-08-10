@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BannerView">
+        <attr name="CanLooper" format="boolean"/>
+        <attr name="Mode" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="meizu" value="1"/>
+            <enum name="tran" value="2"/>
+        </attr>
+        <attr name="DotSize" format="dimension"/>
+        <attr name="DotDistance" format="dimension"/>
+        <attr name="DotNormalDrawable" format="reference"/>
+        <attr name="DotSelectDrawable" format="reference"/>
+        <attr name="DotLocation" format="enum">
+            <enum name="Left" value="-1"/>
+            <enum name="center" value="0"/>
+            <enum name="Right" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
