@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="BannerView">
         <attr name="CanLooper" format="boolean"/>
+        <attr name="AspectRatio" format="float"/>
         <attr name="Mode" format="enum">
             <enum name="normal" value="0"/>
             <enum name="meizu" value="1"/>

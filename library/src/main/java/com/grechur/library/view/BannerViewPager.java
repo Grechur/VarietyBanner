@@ -51,6 +51,8 @@ public class BannerViewPager extends ViewPager{
 
     private Activity mActivity;
 
+    private boolean mCanLooper = true;
+
     //设置监听
     private IBannerListener mBannerListener;
 
@@ -91,7 +93,9 @@ public class BannerViewPager extends ViewPager{
 //        startRoll();
     }
 
-
+    public void setCanLooper(boolean canLooper) {
+        this.mCanLooper = canLooper;
+    }
 
     public void startRoll(){
         //在开始之前，把前一个消息去掉，防止快速滑动时出现越来越快
@@ -130,7 +134,7 @@ public class BannerViewPager extends ViewPager{
             BannerViewPager banner = mWeakReference.get();
             if(banner!=null && msg.what == MSG_HANDLER_WHAT){
                 banner.setCurrentItem(banner.getCurrentItem()+1);
-                banner.startRoll();
+                if(banner.mCanLooper) banner.startRoll();
             }
         }
     }
@@ -198,14 +202,14 @@ public class BannerViewPager extends ViewPager{
     private Application.ActivityLifecycleCallbacks mActivityLifecycle = new SimpleActivityLifecycleCallbacks(){
         @Override
         public void onActivityResumed(Activity activity) {
-            if(activity == mActivity){
+            if(activity == mActivity&&mCanLooper){
                 startRoll();
             }
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
-            if(activity == mActivity){
+            if(activity == mActivity&&mCanLooper){
                 //停止轮播
                 stopRoll();
             }
@@ -215,8 +219,11 @@ public class BannerViewPager extends ViewPager{
     private View getConvertView(int index) {
         if(mViews.size() < mBannerAdapter.getCount())return  null;
         for (View mConvertView : mViews) {
-            Log.e("TAG",mConvertView.toString());
+//            Log.e("TAG",mConvertView.toString());
+            //判断缓存中的view没有父类，说明该view从viewpager中销毁了
             if(mConvertView.getParent() == null){
+//                Log.e("TAG",R.id.image+":="+mConvertView.getTag(R.id.image));
+//                Log.e("TAG",""+mBannerAdapter.getData(index));
                 if(mConvertView.getTag(R.id.image).equals(mBannerAdapter.getData(index))) {
                     return mConvertView;
                 }

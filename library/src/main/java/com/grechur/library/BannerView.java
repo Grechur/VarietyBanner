@@ -49,6 +49,7 @@ public class BannerView extends RelativeLayout{
     private int mDotLocation;
     private boolean mCanLooper = true;
     private int mMode;
+    private float mAspectRatio = (float) 8/3;
 
     public BannerView(Context context) {
         this(context,null);
@@ -82,6 +83,7 @@ public class BannerView extends RelativeLayout{
     private void initAttr(Context context, AttributeSet attrs) {
         TypedArray array = context.obtainStyledAttributes(attrs,R.styleable.BannerView);
         mCanLooper = array.getBoolean(R.styleable.BannerView_CanLooper,mCanLooper);
+        mAspectRatio = array.getFloat(R.styleable.BannerView_AspectRatio,mAspectRatio);
         mMode = array.getInt(R.styleable.BannerView_Mode,mMode);
         mDotSize = array.getDimensionPixelOffset(R.styleable.BannerView_DotSize,dp2px(mDotSize));
         mDotDistance = array.getDimensionPixelOffset(R.styleable.BannerView_DotDistance,dp2px(mDotDistance));
@@ -115,6 +117,18 @@ public class BannerView extends RelativeLayout{
     public void setBannerListener(IBannerListener bannerListener) {
         this.mBannerListener = bannerListener;
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = getMeasuredWidth();
+
+        int height = (int) (width/mAspectRatio);
+
+        getLayoutParams().height = height;
+
+    }
+
     /**
      * 设置适配器
      * @param bannerAdapter
@@ -128,6 +142,7 @@ public class BannerView extends RelativeLayout{
         }
         mBanAdapter = bannerAdapter;
         mBannerVp.setAdapter(bannerAdapter);
+        mBannerVp.setCanLooper(mCanLooper);
         if(mCanLooper) mBannerVp.startRoll();
         if(mMode == 1) {
             mBannerVp.setPageTransformer(true, new CoverModeTransformer());
@@ -169,12 +184,12 @@ public class BannerView extends RelativeLayout{
                 float touchX = ev.getRawX();
                 // 如果是魅族模式，去除两边的区域
                 if(touchX >= paddingLeft && touchX < getScreenWidth(getContext()) - paddingLeft){
-                    mBannerVp.stopRoll();
+                    if(mCanLooper) mBannerVp.stopRoll();
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 //抬起重新开始切换
-                mBannerVp.startRoll();
+                if(mCanLooper) mBannerVp.startRoll();
                 break;
         }
         return super.dispatchTouchEvent(ev);
